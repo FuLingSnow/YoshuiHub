@@ -1,0 +1,99 @@
+{
+  "_notice": "YoshuiHub 诊断规则库（随客户端版本内置，并从固定的官方静态地址更新）。规则格式带版本号，客户端必须忽略不认识的字段。",
+  "schemaVersion": 1,
+  "rulesVersion": "2026.09.29",
+  "updatedAt": "2026-09-29T12:00:00Z",
+  "rules": [
+    {
+      "id": "java-version-mismatch",
+      "severity": "error",
+      "errorCode": "YH-JAVA-002",
+      "match": {
+        "scope": ["launch-log", "hs-err"],
+        "pattern": "UnsupportedClassVersionError|class file version (\\d+)",
+        "flags": "i"
+      },
+      "title": "Java 版本不匹配",
+      "detail": "游戏的 class file version 与当前 Java 不一致（匹配片段：{match}）。",
+      "action": "在实例设置中改用对应 Java：1.20.5+ 用 21，1.18–1.20.4 用 17，1.16.5 及以下用 8。"
+    },
+    {
+      "id": "out-of-memory",
+      "severity": "error",
+      "errorCode": "YH-LAUNCH-004",
+      "match": {
+        "scope": ["launch-log", "hs-err"],
+        "pattern": "java\\.lang\\.OutOfMemoryError|insufficient memory for the Java Runtime",
+        "flags": "i"
+      },
+      "title": "内存不足",
+      "detail": "JVM 申请内存失败，当前分配 {maxMb} MB。",
+      "action": "降低实例内存分配或关闭其它占用内存的程序；32 位 Java 无法使用超过约 1.5GB。"
+    },
+    {
+      "id": "opengl-driver",
+      "severity": "error",
+      "errorCode": "YH-LAUNCH-005",
+      "match": {
+        "scope": ["launch-log"],
+        "pattern": "Pixel format not accelerated|Failed to make context current|GLFW error 65542",
+        "flags": "i"
+      },
+      "title": "显卡驱动或 OpenGL 组件异常",
+      "detail": "未能创建 OpenGL 上下文，通常与驱动过旧或缺少 opengl32.dll 有关。",
+      "action": "更新显卡驱动；确认 C:\\Windows\\System32\\opengl32.dll 存在；笔记本请让 Java 使用独立显卡运行。"
+    },
+    {
+      "id": "mixin-conflict",
+      "severity": "error",
+      "errorCode": "YH-LAUNCH-006",
+      "match": {
+        "scope": ["launch-log"],
+        "pattern": "Mixin apply failed|org\\.spongepowered\\.asm\\.mixin",
+        "flags": "i"
+      },
+      "title": "Mixin 注入冲突（多为 Mod 不兼容）",
+      "detail": "两个或更多内容条目修改了同一处游戏代码。",
+      "action": "用本地内容管理逐个停用最近新增的 Mod 以定位冲突；确认内容与游戏版本、加载器版本匹配。"
+    },
+    {
+      "id": "missing-dependency",
+      "severity": "error",
+      "errorCode": "YH-LAUNCH-007",
+      "match": {
+        "scope": ["launch-log"],
+        "pattern": "requires .* which is missing|Missing or unsupported mandatory dependencies|No such mod",
+        "flags": "i"
+      },
+      "title": "缺少前置内容",
+      "detail": "某个内容条目声明的前置依赖未安装或版本不符。",
+      "action": "查看本地内容管理中的冲突提示，补齐前置内容后重试。"
+    },
+    {
+      "id": "native-lib-load-fail",
+      "severity": "warning",
+      "errorCode": "YH-LAUNCH-008",
+      "match": {
+        "scope": ["launch-log"],
+        "pattern": "UnsatisfiedLinkError|Failed to load native|no lwjgl in java\\.library\\.path",
+        "flags": "i"
+      },
+      "title": "原生库加载失败",
+      "detail": "原生库未正确解包，或未加入 java.library.path。",
+      "action": "对实例执行「校验并修复文件」后重新启动。"
+    },
+    {
+      "id": "fetch-all-channels-failed",
+      "severity": "error",
+      "errorCode": "YH-CNT-002",
+      "match": {
+        "scope": ["client-log"],
+        "pattern": "all fetch channels failed|FetchChannel.*exhausted",
+        "flags": "i"
+      },
+      "title": "所有内容获取通道均失败",
+      "detail": "官方通道与镜像通道都未能取到所需文件。",
+      "action": "检查网络与代理设置后重试；若仅个别文件失败，可稍后单独重试该文件。"
+    }
+  ]
+}

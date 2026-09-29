@@ -1,0 +1,36 @@
+{
+  "_notice": "测试样例：仅用于验证客户端更新清单的解析、通道选择与回滚逻辑。正式发布时必须把 sha256 替换为真实摘要、signature 替换为 ECDSA P-256 真实签名，并确保私钥不出现在仓库与 CI 变量中（ADR-17 / §5.11）。",
+  "schemaVersion": 1,
+  "channel": "stable",
+  "version": "1.2.0",
+  "publishedAt": "2026-09-29T12:00:00Z",
+  "minClientVersion": "1.0.0",
+  "keyId": "test-key-2026",
+  "minFromVersion": ["1.1.0", "1.1.5"],
+  "packages": [
+    {
+      "platform": "win-x64",
+      "kind": "framework-dependent",
+      "url": "https://github.com/FuLingSnow/YoshuiHub/releases/download/v1.2.0/YoshuiHub-1.2.0-win-x64.zip",
+      "size": 46123456,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "delta": {
+        "algorithm": "yoshui-delta-v1",
+        "from": "1.1.5",
+        "url": "https://github.com/FuLingSnow/YoshuiHub/releases/download/v1.2.0/1.1.5-to-1.2.0.delta",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "platform": "win-x64",
+      "kind": "portable-selfcontained",
+      "url": "https://github.com/FuLingSnow/YoshuiHub/releases/download/v1.2.0/YoshuiHub-1.2.0-win-x64-portable.zip",
+      "size": 117456789,
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ],
+  "signature": {
+    "algorithm": "ECDSA-P256-SHA256",
+    "value": "TEST-ONLY-PLACEHOLDER-NOT-A-REAL-SIGNATURE"
+  }
+}
